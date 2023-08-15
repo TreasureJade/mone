@@ -113,7 +113,7 @@ public class WxLoginMgr extends LoginMgr {
         }
         UserRegisterParam registerParam = new UserRegisterParam();
         registerParam.setAccount(entity.getAccount());
-        registerParam.setUserType(1);
+        registerParam.setUserType(userVo.getUserType());
         userFacade.register(registerParam);
 
         return userVo;

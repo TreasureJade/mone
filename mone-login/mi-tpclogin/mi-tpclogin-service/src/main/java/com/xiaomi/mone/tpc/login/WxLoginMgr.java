@@ -54,7 +54,7 @@ public class WxLoginMgr extends LoginMgr {
 
     public String buildAuthUrl(String pageUrl, String state) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append(getAuthUrl()).append("&redirect_uri").append(URLEncoder.encode(pageUrl, "UTF-8"));
+        sb.append(getAuthUrl()).append("&redirect_uri=").append(URLEncoder.encode(pageUrl, "UTF-8"));
         if (StringUtils.isNotBlank(state)) {
             sb.append("&state").append(state);
         }
@@ -126,7 +126,7 @@ public class WxLoginMgr extends LoginMgr {
 
     @Override
     public String getAuthUrl() {
-        return "https://open.weixin.qq.com/connect/qrconnect" + "?appid=" + wxAppId + "&response_type=code";
+        return "https://open.weixin.qq.com/connect/qrconnect" + "?appid=" + wxAppId + "&response_type=code" + "&scope=snsapi_login";
     }
 
     @Override

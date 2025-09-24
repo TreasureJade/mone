@@ -84,6 +84,26 @@ public class GraphStoreConfig {
      */
     @Builder.Default
     private Map<String, Object> config = new HashMap<>();
+
+    /**
+     * LLM配置
+     */
+    private LlmConfig llm;
+
+    /**
+     * 嵌入模型配置
+     */
+    private EmbedderConfig embedder;
+
+    /**
+     * 自定义提示词
+     */
+    private String customPrompt;
+
+    /**
+     * @param configMap
+     * @return
+     */
     
     /**
      * 从Map创建配置
@@ -121,7 +141,23 @@ public class GraphStoreConfig {
             Map<String, Object> config = (Map<String, Object>) configMap.get("config");
             builder.config(config);
         }
-        
+
+        if (configMap.containsKey("llm")) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> llmMap = (Map<String, Object>) configMap.get("llm");
+            builder.llm(LlmConfig.fromMap(llmMap));
+        }
+
+        if (configMap.containsKey("embedder")) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> embedderMap = (Map<String, Object>) configMap.get("embedder");
+            builder.embedder(EmbedderConfig.fromMap(embedderMap));
+        }
+
+        if (configMap.containsKey("customPrompt")) {
+            builder.customPrompt((String) configMap.get("customPrompt"));
+        }
+
         return builder.build();
     }
     
@@ -176,13 +212,24 @@ public class GraphStoreConfig {
     }
     
     /**
-     * 创建默认的Kuzu配置  
+     * 创建默认的Kuzu配置（本地嵌入式）
      */
     public static GraphStoreConfig kuzuDefault() {
         return GraphStoreConfig.builder()
             .provider(Provider.KUZU)
-            .url(":memory:")
-            .enabled(false)
+            .url("./data/kuzu")
+            .enabled(true)
+            .build();
+    }
+
+    /**
+     * 创建本地嵌入式Kuzu配置（测试用）
+     */
+    public static GraphStoreConfig kuzuEmbedded() {
+        return GraphStoreConfig.builder()
+            .provider(Provider.KUZU)
+            .url("./data/kuzu_embedded")
+            .enabled(true)
             .build();
     }
 }
